@@ -1,0 +1,15 @@
+version: v2
+# 'clean', when set to true, deletes the directories, zip files, and/or jar files specified in the `out` field for
+# all plugins before running code generation.
+clean: true
+managed:
+  enabled: true
+plugins:
+  - remote: buf.build/protocolbuffers/php
+    out: gen
+#  - remote: buf.build/grpc/php
+#    out: gen
+  - remote: buf.build/community/roadrunner-server-php-grpc:v5.0.2
+    out: gen
+inputs:
+  - directory: ./schema
