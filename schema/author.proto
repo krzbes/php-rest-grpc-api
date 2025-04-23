@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package  Schema;
+
+
+import "song.proto";
+
+message Author {
+    int32 id = 1;
+    string name = 2;
+    string surname = 3;
+    repeated Song songs = 4;
+}
+
+service AuthorService {
+    rpc GetAuthor (GetAuthorRequest) returns (GetAuthorResponse);
+    rpc CreateAuthor(CreateAuthorRequest) returns (DefaultAuthorResponse);
+    rpc DeleteAuthor(DeleteAuthorRequest) returns (DefaultAuthorResponse);
+    rpc UpdateAuthor(UpdateAuthorRequest) returns (DefaultAuthorResponse);
+    rpc ListAuthors (ListAuthorsRequest) returns (stream GetAuthorResponse);
+}
+
+message GetAuthorRequest {
+    int32 id = 1;
+}
+
+message GetAuthorResponse {
+    Author author = 1;
+}
+
+message CreateAuthorRequest {
+    string name = 2;
+
+    string surname = 3;
+}
+
+message DefaultAuthorResponse {
+    string message = 2;
+}
+
+message DeleteAuthorRequest {
+    int32 id = 1;
+}
+
+message UpdateAuthorRequest {
+    int32 id = 1;
+    string name = 2;
+    string surname = 3;
+}
+message ListAuthorsRequest {
+
+}

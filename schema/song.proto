@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package Schema;
+
+
+message Song {
+    int32 id = 1;
+    string title = 2;
+    string release_year = 3;
+    int32 author_id = 4;
+}
+
+service SongService {
+    rpc GetSong (GetSongRequest) returns (GetSongResponse);
+    rpc CreateSong (CreateSongRequest) returns (DefaultSongResponse);
+    rpc DeleteSong (DeleteSongRequest) returns (DefaultSongResponse);
+    rpc UpdateSong (UpdateSongRequest) returns (DefaultSongResponse);
+    rpc ListSongs (ListSongRequest) returns (stream GetSongResponse);
+}
+
+message GetSongRequest {
+    int32 id = 1;
+}
+
+message GetSongResponse {
+    Song song = 1;
+}
+
+message CreateSongRequest {
+    string title = 1;
+
+    string release_year = 2;
+
+    int32 author_id = 3;
+}
+
+message DefaultSongResponse {
+    string message = 2;
+}
+
+message DeleteSongRequest {
+    int32 id = 1;
+}
+
+message UpdateSongRequest {
+    int32 id = 1;
+    string title = 2;
+    string release_year = 3;
+}
+message ListSongRequest {
+
+}
