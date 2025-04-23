@@ -1,0 +1,23 @@
+services:
+  database:
+    image: 'mysql:latest'
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: root
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./mysql:/var/lib/mysql
+    networks:
+      - symfony
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    environment:
+      PMA_HOST: database
+      PMA_PORT: 3306
+    ports:
+      - '8082:80'
+    networks:
+      - symfony
+networks:
+    symfony:
