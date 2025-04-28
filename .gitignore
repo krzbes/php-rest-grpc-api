@@ -2,3 +2,6 @@ roadrunner-2024.3.5-linux-amd64
 vendor
 rr
 .idea
+.env
+mysql
+var

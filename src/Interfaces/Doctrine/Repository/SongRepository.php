@@ -2,17 +2,28 @@
 
 namespace App\Interfaces\Doctrine\Repository;
 
-use App\Domain\Model\Song;
-use App\Domain\Repository\SongRepository as SongRepositoryInterface;
+use App\Domain\Music\Model\Song as DomainSong;
+use App\Domain\Music\Repository\SongRepository as SongRepositoryInterface;
+use App\Interfaces\Doctrine\Mapper\SongMapper;
+use App\Interfaces\Doctrine\Model\Song as DoctrineSong;
+use Doctrine\ORM\EntityManagerInterface;
 
 class SongRepository implements SongRepositoryInterface
 {
-    public function __construct()
-    {
+    public function __construct(
+        private readonly SongMapper $songMapper,
+        private readonly EntityManagerInterface $em
+    ) {
     }
 
-    public function findById(string $id): ?Song
+    public function findById(string $id): ?DomainSong
     {
-        // TODO: Implement findById() method.
+        $song = $this->em->getRepository(DoctrineSong::class)->find($id);
+
+        if (!$song) {
+            return null;
+        }
+
+        return $this->songMapper->toDomain($song);
     }
 }

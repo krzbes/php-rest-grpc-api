@@ -3,19 +3,24 @@
 namespace App\Interfaces\DependencyInjection;
 
 use ReflectionClass;
+use RuntimeException;
 
 class Container
 {
     private array $instances = [];
-
+    private array $bindings = [];
     public function get(string $id)
     {
+        if (isset($this->bindings[$id])) {
+            $id = $this->bindings[$id];
+        }
+
         if (isset($this->instances[$id])) {
             return $this->instances[$id];
         }
 
         if (!class_exists($id)) {
-            throw new Exception("Class $id doesn't exist");
+            throw new RuntimeException("Class $id doesn't exist");
         }
 
 
@@ -33,7 +38,7 @@ class Container
                 $paramType = $param->getType();
 
                 if (!$paramType || $paramType->isBuiltin()) {
-                    throw new Exception("Failed to autowire \${$param->getName()} w class $id");
+                    throw new RuntimeException("Failed to autowire \${$param->getName()} w class $id");
                 }
 
 
@@ -48,5 +53,15 @@ class Container
         $this->instances[$id] = $instance;
 
         return $instance;
+    }
+
+    public function set(string $id, object $instance): void
+    {
+        $this->instances[$id] = $instance;
+    }
+
+    public function bind(string $abstract, string $concrete): void
+    {
+        $this->bindings[$abstract] = $concrete;
     }
 }

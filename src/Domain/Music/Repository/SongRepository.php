@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Domain\Repository;
+namespace App\Domain\Music\Repository;
 
-use App\Domain\Model\Song;
+use App\Domain\Music\Model\Song;
 
 interface SongRepository
 {
