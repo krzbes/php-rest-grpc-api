@@ -9,17 +9,22 @@ use App\Interfaces\Grpc\AuthorService;
 use App\Interfaces\Grpc\SongService;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Container\ContainerInterface;
 use Schema\AuthorServiceInterface;
 use Schema\SongServiceInterface;
 use Spiral\RoadRunner\GRPC\Server;
 use Spiral\RoadRunner\Worker;
+use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/../');
 $dotenv->load();
 $container = new Container();
 $container->bind(SongRepository::class, DoctrineSongRepository::class);
 $container->bind(EntityManagerInterface::class, EntityManager::class);
+
+
+$validator = Validation::createValidator();
+$container->set(ValidatorInterface::class, $validator);
 
 
 

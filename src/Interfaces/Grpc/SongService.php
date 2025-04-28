@@ -2,6 +2,8 @@
 
 namespace App\Interfaces\Grpc;
 
+use App\Application\Exception\EntityNotFoundException;
+use App\Application\Exception\ValidationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Schema\CreateSongRequest;
 use Schema\DefaultSongResponse;
@@ -12,7 +14,9 @@ use Schema\ListSongRequest;
 use Schema\SongServiceInterface;
 use Schema\UpdateSongRequest;
 use Spiral\RoadRunner\GRPC\ContextInterface;
-use \App\Application\Services\SongService as AppSongService;
+use \App\Application\Service\SongService as AppSongService;
+use Spiral\RoadRunner\GRPC\Exception\GRPCException;
+use Spiral\RoadRunner\GRPC\StatusCode;
 
 class SongService implements SongServiceInterface
 {
@@ -25,16 +29,20 @@ class SongService implements SongServiceInterface
     public function GetSong(ContextInterface $ctx, GetSongRequest $in): GetSongResponse
     {
         $id = $in->getId();
-        if( !$id || $id < 0){
-            return new GetSongResponse();
+        if (!$id) {
+            throw new GRPCException('No id provided', StatusCode::INVALID_ARGUMENT);
         }
 
-        $result = $this->songService->fetchSong($in->getId());
+        try {
+            $result = $this->songService->fetchSong($id);
 
-
-        if (!$result) {
-            return new GetSongResponse();
+        } catch (ValidationException $e) {
+            throw new GRPCException($e->getMessage(), StatusCode::INVALID_ARGUMENT);
+        } catch (EntityNotFoundException $e) {
+            throw new GRPCException($e->getMessage(), StatusCode::NOT_FOUND);
         }
+
+
         $response = new GetSongResponse();
         $response->setSong($this->songMapper->fromDomain($result));
         return $response;
