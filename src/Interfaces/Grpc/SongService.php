@@ -3,8 +3,8 @@
 namespace App\Interfaces\Grpc;
 
 use App\Application\Exception\EntityNotFoundException;
+use App\Application\Exception\FailedToSaveSongException;
 use App\Application\Exception\ValidationException;
-use Doctrine\ORM\EntityManagerInterface;
 use Google\Protobuf\Internal\GPBType;
 use Google\Protobuf\Internal\RepeatedField;
 use Schema\CreateSongRequest;
@@ -53,7 +53,30 @@ class SongService implements SongServiceInterface
 
     public function CreateSong(ContextInterface $ctx, CreateSongRequest $in): DefaultSongResponse
     {
-        return new DefaultSongResponse();
+        $title = $in->getTitle();
+        if (!$title) {
+            throw new GRPCException('No title provided', StatusCode::INVALID_ARGUMENT);
+        }
+
+        $releaseYear = $in->getReleaseYear();
+        if (!$releaseYear) {
+            throw new GRPCException('No Release Year provided', StatusCode::INVALID_ARGUMENT);
+        }
+        $authorId = $in->getAuthorId();
+        if (!$authorId) {
+            throw new GRPCException('No Author Id provided', StatusCode::INVALID_ARGUMENT);
+        }
+        try {
+            $this->songService->createSong($title, $releaseYear, $authorId);
+        } catch (ValidationException $e) {
+            throw new GRPCException($e->getMessage(), StatusCode::INVALID_ARGUMENT);
+        } catch (FailedToSaveSongException $e) {
+            throw new GRPCException($e->getMessage(), StatusCode::ABORTED);
+        }
+
+        $response = new DefaultSongResponse();
+        $response->setMessage("song created");
+        return $response;
     }
 
     public function DeleteSong(ContextInterface $ctx, DeleteSongRequest $in): DefaultSongResponse

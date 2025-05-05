@@ -28,12 +28,8 @@ class Song
     private ?Author $author;
 
 
-    public function __construct(int $id, string $title, ?string $release_year, ?Author $author)
+    public function __construct()
     {
-        $this->id = $id;
-        $this->title = $title;
-        $this->releaseYear = $release_year;
-        $this->author = $author;
     }
 
     public function getId(): int

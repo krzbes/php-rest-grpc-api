@@ -9,4 +9,6 @@ interface SongRepository
     public function findById(string $id): ?Song;
 
     public function findAll(): \Generator;
+
+    public function save(Song $song): void;
 }
