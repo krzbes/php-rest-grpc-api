@@ -50,9 +50,9 @@ interface SongServiceInterface extends GRPC\ServiceInterface
     /**
     * @param GRPC\ContextInterface $ctx
     * @param ListSongRequest $in
-    * @return GetSongResponse
+    * @return ListSongResponse
     *
     * @throws GRPC\Exception\InvokeException
     */
-    public function ListSongs(GRPC\ContextInterface $ctx, ListSongRequest $in): GetSongResponse;
+    public function ListSongs(GRPC\ContextInterface $ctx, ListSongRequest $in): ListSongResponse;
 }

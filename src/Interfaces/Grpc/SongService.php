@@ -5,12 +5,16 @@ namespace App\Interfaces\Grpc;
 use App\Application\Exception\EntityNotFoundException;
 use App\Application\Exception\ValidationException;
 use Doctrine\ORM\EntityManagerInterface;
+use Google\Protobuf\Internal\GPBType;
+use Google\Protobuf\Internal\RepeatedField;
 use Schema\CreateSongRequest;
 use Schema\DefaultSongResponse;
 use Schema\DeleteSongRequest;
 use Schema\GetSongRequest;
 use Schema\GetSongResponse;
 use Schema\ListSongRequest;
+use Schema\ListSongResponse;
+use Schema\Song;
 use Schema\SongServiceInterface;
 use Schema\UpdateSongRequest;
 use Spiral\RoadRunner\GRPC\ContextInterface;
@@ -35,7 +39,6 @@ class SongService implements SongServiceInterface
 
         try {
             $result = $this->songService->fetchSong($id);
-
         } catch (ValidationException $e) {
             throw new GRPCException($e->getMessage(), StatusCode::INVALID_ARGUMENT);
         } catch (EntityNotFoundException $e) {
@@ -63,8 +66,14 @@ class SongService implements SongServiceInterface
         return new DefaultSongResponse();
     }
 
-    public function ListSongs(ContextInterface $ctx, ListSongRequest $in): GetSongResponse
+    public function ListSongs(ContextInterface $ctx, ListSongRequest $in): ListSongResponse
     {
-        return new GetSongResponse();
+        $songs = new RepeatedField(GPBType::MESSAGE, Song::class);
+        $response = new ListSongResponse();
+        foreach ($this->songService->fetchAllSongs() as $song) {
+            $songs[] = $this->songMapper->fromDomain($song);
+        }
+        $response->setSong($songs);
+        return $response;
     }
 }

@@ -32,4 +32,11 @@ class SongService
         }
         return $song;
     }
+
+    public function fetchAllSongs(): \Generator
+    {
+        foreach ($this->songRepository->findAll() as $song) {
+            yield $song;
+        }
+    }
 }

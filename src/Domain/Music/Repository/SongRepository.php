@@ -7,4 +7,6 @@ use App\Domain\Music\Model\Song;
 interface SongRepository
 {
     public function findById(string $id): ?Song;
+
+    public function findAll(): \Generator;
 }

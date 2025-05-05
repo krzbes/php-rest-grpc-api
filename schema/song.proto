@@ -15,7 +15,7 @@ service SongService {
     rpc CreateSong (CreateSongRequest) returns (DefaultSongResponse);
     rpc DeleteSong (DeleteSongRequest) returns (DefaultSongResponse);
     rpc UpdateSong (UpdateSongRequest) returns (DefaultSongResponse);
-    rpc ListSongs (ListSongRequest) returns (stream GetSongResponse);
+    rpc ListSongs (ListSongRequest) returns (ListSongResponse);
 }
 
 message GetSongRequest {
@@ -49,4 +49,8 @@ message UpdateSongRequest {
 }
 message ListSongRequest {
 
+}
+
+message ListSongResponse {
+    repeated Song song = 1;
 }
