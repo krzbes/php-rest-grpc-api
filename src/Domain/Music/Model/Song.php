@@ -11,7 +11,7 @@ class Song
         private ?int $id,
         private string $title,
         private string $releaseYear,
-        private int $authorId
+        private readonly int $authorId
     ) {
     }
 
@@ -42,5 +42,15 @@ class Song
         }
 
         $this->id = $id;
+    }
+
+    public function changeTitle(string $title): void
+    {
+        $this->title = $title;
+    }
+
+    public function changeReleaseYear(string $releaseYear): void
+    {
+        $this->releaseYear = $releaseYear;
     }
 }

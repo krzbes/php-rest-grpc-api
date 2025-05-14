@@ -86,6 +86,31 @@ class SongService implements SongServiceInterface
 
     public function UpdateSong(ContextInterface $ctx, UpdateSongRequest $in): DefaultSongResponse
     {
+        $id = $in->getId();
+        if (!$id) {
+            throw new GRPCException('No id provided', StatusCode::INVALID_ARGUMENT);
+        }
+
+
+        $title = $in->getTitle();
+        if (!$title) {
+            throw new GRPCException('No title provided', StatusCode::INVALID_ARGUMENT);
+        }
+
+        $releaseYear = $in->getReleaseYear();
+        if (!$releaseYear) {
+            throw new GRPCException('No Release Year provided', StatusCode::INVALID_ARGUMENT);
+        }
+
+        try {
+            $this->songService->updateSong($id, $title, $releaseYear);
+        } catch (ValidationException $e) {
+            throw new GRPCException($e->getMessage(), StatusCode::INVALID_ARGUMENT);
+        } catch (EntityNotFoundException $e) {
+            throw new GRPCException($e->getMessage(), StatusCode::NOT_FOUND);
+        } catch (FailedToSaveSongException $e) {
+            throw new GRPCException($e->getMessage(), StatusCode::ABORTED);
+        }
         return new DefaultSongResponse();
     }
 

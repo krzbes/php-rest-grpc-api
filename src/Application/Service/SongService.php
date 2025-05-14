@@ -54,10 +54,37 @@ class SongService
         $this->validator->validateReleaseYear($releaseYear);
 
         $song = $this->songFactory->create($title, $releaseYear, $authorId);
-        try{
+        try {
             $this->songRepository->save($song);
         } catch (\Exception $exception) {
-            throw new FailedToSaveSongException("Failed to save song", previous:  $exception);
+            throw new FailedToSaveSongException("Failed to save song", previous: $exception);
+        }
+    }
+
+    /**
+     * @throws ValidationException
+     * @throws EntityNotFoundException
+     * @throws FailedToSaveSongException
+     */
+    public function updateSong(int $id, string $title, string $releaseYear ): void
+    {
+        $this->validator->validateId($id);
+        $this->validator->validateTitle($title);
+        $this->validator->validateReleaseYear($releaseYear);
+
+        $song = $this->songRepository->findById($id);
+
+        if ($song === null) {
+            throw new EntityNotFoundException("Song with ID {$id} not found.");
+        }
+
+        $song->changeTitle($title);
+        $song->changeReleaseYear($releaseYear);
+
+        try {
+            $this->songRepository->save($song);
+        } catch (\Throwable $e) {
+            throw new FailedToSaveSongException("Failed to update song with ID {$id}.", 0, $e);
         }
     }
 }
