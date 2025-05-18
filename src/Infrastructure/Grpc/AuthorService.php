@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Interfaces\Grpc;
+namespace App\Infrastructure\Grpc;
 
 use Schema\AuthorServiceInterface;
 use Schema\CreateAuthorRequest;

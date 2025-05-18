@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Interfaces\Grpc;
+namespace App\Infrastructure\Grpc;
 
 use App\Application\Exception\EntityNotFoundException;
 use App\Application\Exception\FailedToSaveSongException;
@@ -81,6 +81,19 @@ class SongService implements SongServiceInterface
 
     public function DeleteSong(ContextInterface $ctx, DeleteSongRequest $in): DefaultSongResponse
     {
+        $id = $in->getId();
+        if (!$id) {
+            throw new GRPCException('No id provided', StatusCode::INVALID_ARGUMENT);
+        }
+        try{
+            $this->songService->deleteSong($id);
+
+        } catch (EntityNotFoundException $e) {
+            throw new GRPCException($e->getMessage(), StatusCode::NOT_FOUND);
+
+        } catch (ValidationException $e) {
+            throw new GRPCException($e->getMessage(), StatusCode::INVALID_ARGUMENT);
+        }
         return new DefaultSongResponse();
     }
 

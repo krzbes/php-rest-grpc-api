@@ -2,11 +2,14 @@
 
 namespace App\Domain\Music\Model;
 
+use App\Domain\Common\DomainEvent;
+use App\Domain\Music\Event\SongDeletedEvent;
 use App\Domain\Music\Exception\SongIdAlreadySetException;
 
 class Song
 {
 
+    private array $events = [];
     public function __construct(
         private ?int $id,
         private string $title,
@@ -52,5 +55,21 @@ class Song
     public function changeReleaseYear(string $releaseYear): void
     {
         $this->releaseYear = $releaseYear;
+    }
+
+    public function delete(): void
+    {
+        $this->addEvent(new SongDeletedEvent($this->id));
+    }
+
+    private function addEvent(DomainEvent $event): void
+    {
+        $this->events[] = $event;
+    }
+    public function pullEvents(): array
+    {
+        $events = $this->events;
+        $this->events = [];
+        return $events;
     }
 }

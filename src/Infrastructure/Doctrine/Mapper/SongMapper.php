@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Interfaces\Doctrine\Mapper;
+namespace App\Infrastructure\Doctrine\Mapper;
 
 use App\Domain\Music\Model\Song as DomainSong;
-use App\Interfaces\Doctrine\Model\Song as DoctrineSong;
+use App\Infrastructure\Doctrine\Model\Song as DoctrineSong;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Interfaces\Doctrine\Model\Author as DoctrineAuthor;
+use App\Infrastructure\Doctrine\Model\Author as DoctrineAuthor;
 use Doctrine\ORM\Exception\ORMException;
 
 class SongMapper

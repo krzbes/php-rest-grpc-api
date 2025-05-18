@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Interfaces\DependencyInjection;
+namespace App\Infrastructure\DependencyInjection;
 
 use ReflectionClass;
 use RuntimeException;
@@ -9,6 +9,13 @@ class Container
 {
     private array $instances = [];
     private array $bindings = [];
+
+    private array $factories = [];
+
+    public function bindFactory(string $id, callable $factory): void
+    {
+        $this->factories[$id] = $factory;
+    }
     public function get(string $id)
     {
         if (isset($this->bindings[$id])) {
@@ -16,6 +23,11 @@ class Container
         }
 
         if (isset($this->instances[$id])) {
+            return $this->instances[$id];
+        }
+
+        if (isset($this->factories[$id])) {
+            $this->instances[$id] = ($this->factories[$id])($this);
             return $this->instances[$id];
         }
 

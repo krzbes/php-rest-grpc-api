@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Interfaces\Grpc;
+namespace App\Infrastructure\Grpc;
 
 use App\Domain\Music\Model\Song as DomainSong;
 use Schema\Song as GrpcSong;

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Interfaces\Doctrine\Repository;
+namespace App\Infrastructure\Doctrine\Repository;
 
 use App\Domain\Music\Model\Song as DomainSong;
 use App\Domain\Music\Repository\SongRepository as SongRepositoryInterface;
-use App\Interfaces\Doctrine\Mapper\SongMapper;
-use App\Interfaces\Doctrine\Model\Song as DoctrineSong;
+use App\Infrastructure\Doctrine\Mapper\SongMapper;
+use App\Infrastructure\Doctrine\Model\Song as DoctrineSong;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
@@ -33,7 +33,7 @@ class SongRepository implements SongRepositoryInterface
     {
         $query = $this->em->createQuery(
             'SELECT s, a 
-         FROM App\Interfaces\Doctrine\Model\Song s 
+         FROM App\Infrastructure\Doctrine\Model\Song s 
          LEFT JOIN s.author a'
         );
 
@@ -53,7 +53,6 @@ class SongRepository implements SongRepositoryInterface
     public function save(DomainSong $song): void
     {
         if ($song->getId()) {
-
             $existing = $this->em->find(DoctrineSong::class, $song->getId());
 
             if (!$existing) {
@@ -64,11 +63,17 @@ class SongRepository implements SongRepositoryInterface
             $existing->setReleaseYear($song->getReleaseYear());
 //            $existing->setAuthor($this->authorMapper->toEntity($song->getAuthor()));
         } else {
-
             $new = $this->songMapper->toEntity($song);
             $this->em->persist($new);
         }
 
         $this->em->flush();
+    }
+
+    public function deleteById(string $id): void
+    {
+        $this->em->createQuery('DELETE FROM App\Infrastructure\Doctrine\Model\Song s WHERE s.id = :id')
+            ->setParameter('id', $id)
+            ->execute();
     }
 }

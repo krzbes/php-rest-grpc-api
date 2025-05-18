@@ -3,10 +3,13 @@
 require_once dirname(__DIR__).'/vendor/autoload.php';
 
 use App\Domain\Music\Repository\SongRepository;
-use App\Interfaces\DependencyInjection\Container;
-use App\Interfaces\Doctrine\Repository\SongRepository as DoctrineSongRepository;
-use App\Interfaces\Grpc\AuthorService;
-use App\Interfaces\Grpc\SongService;
+use App\Infrastructure\DependencyInjection\Container;
+use App\Infrastructure\Doctrine\EntityManagerFactory;
+use App\Infrastructure\Doctrine\Repository\SongRepository as DoctrineSongRepository;
+use App\Infrastructure\EventDispatcher\EventDispatcher;
+use App\Infrastructure\EventDispatcher\EventDispatcherFactory;
+use App\Infrastructure\Grpc\AuthorService;
+use App\Infrastructure\Grpc\SongService;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Schema\AuthorServiceInterface;
@@ -26,10 +29,8 @@ $container->bind(EntityManagerInterface::class, EntityManager::class);
 $validator = Validation::createValidator();
 $container->set(ValidatorInterface::class, $validator);
 
-
-
-$entityManager = \App\Interfaces\Doctrine\EntityManagerFactory::create();
-$container->set(EntityManager::class, $entityManager);
+$container->bindFactory(EventDispatcher::class, fn($c) => EventDispatcherFactory::create($c));
+$container->bindFactory(EntityManager::class, fn() => EntityManagerFactory::create());
 
 
 $server = new Server();

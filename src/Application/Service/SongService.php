@@ -9,14 +9,16 @@ use App\Application\Validator\InputValidator;
 use App\Domain\Music\Factory\SongFactory;
 use App\Domain\Music\Model\Song;
 use App\Domain\Music\Repository\SongRepository;
-use Spiral\Core\Attribute\Singleton;
+use App\Infrastructure\EventDispatcher\EventDispatcher;
+
 
 class SongService
 {
     public function __construct(
         private readonly SongRepository $songRepository,
         private readonly InputValidator $validator,
-        private readonly SongFactory $songFactory
+        private readonly SongFactory $songFactory,
+        private readonly EventDispatcher $eventDispatcher
     ) {
     }
 
@@ -85,6 +87,24 @@ class SongService
             $this->songRepository->save($song);
         } catch (\Throwable $e) {
             throw new FailedToSaveSongException("Failed to update song with ID {$id}.", 0, $e);
+        }
+    }
+
+    /**
+     * @throws ValidationException
+     * @throws EntityNotFoundException
+     */
+    public function deleteSong(int $id): void{
+        $this->validator->validateId($id);
+        $song = $this->songRepository->findById($id);
+        if ($song === null) {
+            throw new EntityNotFoundException("Song with ID {$id} not found.");
+        }
+        $song->delete();
+
+        $eventList = $song->pullEvents();
+        foreach ($eventList as $event) {
+            $this->eventDispatcher->dispatch($event);
         }
     }
 }
