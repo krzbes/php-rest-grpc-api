@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Application\Service;
+namespace App\Application\Music\Service;
 
-use App\Application\Exception\EntityNotFoundException;
-use App\Application\Exception\FailedToSaveSongException;
-use App\Application\Exception\ValidationException;
-use App\Application\Validator\InputValidator;
+use App\Application\Music\Exception\EntityNotFoundException;
+use App\Application\Music\Exception\FailedToSaveSongException;
+use App\Application\Music\Exception\ValidationException;
+use App\Application\Music\Validator\InputValidator;
 use App\Domain\Music\Factory\SongFactory;
 use App\Domain\Music\Model\Song;
 use App\Domain\Music\Repository\SongRepository;
@@ -23,8 +23,8 @@ class SongService
     }
 
     /**
-     * @throws ValidationException
-     * @throws EntityNotFoundException
+     * @throws \App\Application\Music\Exception\ValidationException
+     * @throws \App\Application\Music\Exception\EntityNotFoundException
      */
     public function fetchSong(int $id): Song
     {
@@ -47,7 +47,7 @@ class SongService
 
     /**
      * @throws ValidationException
-     * @throws FailedToSaveSongException
+     * @throws \App\Application\Music\Exception\FailedToSaveSongException
      */
     public function createSong(string $title, string $releaseYear, int $authorId): void
     {
@@ -65,8 +65,8 @@ class SongService
 
     /**
      * @throws ValidationException
-     * @throws EntityNotFoundException
-     * @throws FailedToSaveSongException
+     * @throws \App\Application\Music\Exception\EntityNotFoundException
+     * @throws \App\Application\Music\Exception\FailedToSaveSongException
      */
     public function updateSong(int $id, string $title, string $releaseYear ): void
     {
@@ -92,7 +92,7 @@ class SongService
 
     /**
      * @throws ValidationException
-     * @throws EntityNotFoundException
+     * @throws \App\Application\Music\Exception\EntityNotFoundException
      */
     public function deleteSong(int $id): void{
         $this->validator->validateId($id);

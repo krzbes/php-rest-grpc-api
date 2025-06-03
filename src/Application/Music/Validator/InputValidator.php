@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Application\Validator;
+namespace App\Application\Music\Validator;
 
+use App\Application\Music\Exception\ValidationException;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use App\Application\Exception\ValidationException;
 
 class InputValidator
 {
@@ -12,6 +12,9 @@ class InputValidator
     {
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function validateId(int $id): void
     {
         $violations = $this->validator->validate($id, [

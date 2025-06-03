@@ -6,6 +6,7 @@ grpc:
   listen: tcp://0.0.0.0:9001
   proto:
     - "./schema/song.proto"
+    - "./schema/auth.proto"
 
 pool:
   num_workers: 2

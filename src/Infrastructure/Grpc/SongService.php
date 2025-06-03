@@ -2,9 +2,11 @@
 
 namespace App\Infrastructure\Grpc;
 
-use App\Application\Exception\EntityNotFoundException;
-use App\Application\Exception\FailedToSaveSongException;
-use App\Application\Exception\ValidationException;
+use App\Application\Music\Exception\EntityNotFoundException;
+use App\Application\Music\Exception\FailedToSaveSongException;
+use App\Application\Music\Exception\ValidationException;
+use App\Application\Music\Service\SongService as AppSongService;
+use App\Infrastructure\Grpc\Authentication\JwtAuthenticator;
 use Google\Protobuf\Internal\GPBType;
 use Google\Protobuf\Internal\RepeatedField;
 use Schema\CreateSongRequest;
@@ -18,7 +20,6 @@ use Schema\Song;
 use Schema\SongServiceInterface;
 use Schema\UpdateSongRequest;
 use Spiral\RoadRunner\GRPC\ContextInterface;
-use \App\Application\Service\SongService as AppSongService;
 use Spiral\RoadRunner\GRPC\Exception\GRPCException;
 use Spiral\RoadRunner\GRPC\StatusCode;
 
@@ -26,12 +27,15 @@ class SongService implements SongServiceInterface
 {
     public function __construct(
         private readonly AppSongService $songService,
-        private readonly GrpcSongMapper $songMapper
+        private readonly GrpcSongMapper $songMapper,
+        private readonly JwtAuthenticator $jwtAuthenticator
     ) {
     }
 
     public function GetSong(ContextInterface $ctx, GetSongRequest $in): GetSongResponse
     {
+        $this->jwtAuthenticator->authenticate($ctx);
+
         $id = $in->getId();
         if (!$id) {
             throw new GRPCException('No id provided', StatusCode::INVALID_ARGUMENT);
@@ -53,6 +57,8 @@ class SongService implements SongServiceInterface
 
     public function CreateSong(ContextInterface $ctx, CreateSongRequest $in): DefaultSongResponse
     {
+        $this->jwtAuthenticator->authenticate($ctx);
+
         $title = $in->getTitle();
         if (!$title) {
             throw new GRPCException('No title provided', StatusCode::INVALID_ARGUMENT);
@@ -81,16 +87,16 @@ class SongService implements SongServiceInterface
 
     public function DeleteSong(ContextInterface $ctx, DeleteSongRequest $in): DefaultSongResponse
     {
+        $this->jwtAuthenticator->authenticate($ctx);
+
         $id = $in->getId();
         if (!$id) {
             throw new GRPCException('No id provided', StatusCode::INVALID_ARGUMENT);
         }
-        try{
+        try {
             $this->songService->deleteSong($id);
-
         } catch (EntityNotFoundException $e) {
             throw new GRPCException($e->getMessage(), StatusCode::NOT_FOUND);
-
         } catch (ValidationException $e) {
             throw new GRPCException($e->getMessage(), StatusCode::INVALID_ARGUMENT);
         }
@@ -99,6 +105,8 @@ class SongService implements SongServiceInterface
 
     public function UpdateSong(ContextInterface $ctx, UpdateSongRequest $in): DefaultSongResponse
     {
+        $this->jwtAuthenticator->authenticate($ctx);
+
         $id = $in->getId();
         if (!$id) {
             throw new GRPCException('No id provided', StatusCode::INVALID_ARGUMENT);
@@ -129,6 +137,8 @@ class SongService implements SongServiceInterface
 
     public function ListSongs(ContextInterface $ctx, ListSongRequest $in): ListSongResponse
     {
+        $this->jwtAuthenticator->authenticate($ctx);
+
         $songs = new RepeatedField(GPBType::MESSAGE, Song::class);
         $response = new ListSongResponse();
         foreach ($this->songService->fetchAllSongs() as $song) {

@@ -5,10 +5,13 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "doctrine/orm": "^3.3",
+        "firebase/php-jwt": "^6.11",
         "google/protobuf": "^4.30",
         "grpc/grpc": "^1.57",
         "spiral/roadrunner-grpc": "^3.5",
         "symfony/cache": "^6.4",
+        "symfony/password-hasher": "^6.4",
+        "symfony/security-core": "^6.4",
         "symfony/validator": "^6.4",
         "vlucas/phpdotenv": "^5.6"
     },
