@@ -4,10 +4,12 @@ namespace App\Infrastructure\DependencyInjection;
 
 use App\Application\Security\Service\PasswordVerifierInterface;
 use App\Application\Security\Service\TokenServiceInterface;
+use App\Domain\Music\Repository\AuthorRepository;
 use App\Domain\Music\Repository\SongRepository;
 use App\Domain\Security\Repository\AuthenticatedUserRepository;
 use App\Infrastructure\Doctrine\EntityManagerFactory;
 use App\Infrastructure\Doctrine\Repository\AuthenticatedUserRepository as DoctrineAuthenticatedUserRepository;
+use App\Infrastructure\Doctrine\Repository\AuthorRepository as DoctrineAuthorRepository;
 use App\Infrastructure\Doctrine\Repository\SongRepository as DoctrineSongRepository;
 use App\Infrastructure\EventDispatcher\EventDispatcher;
 use App\Infrastructure\EventDispatcher\EventDispatcherFactory;
@@ -26,6 +28,7 @@ class CommonContainerFactory
     {
         $container = new Container();
         $container->bind(SongRepository::class, DoctrineSongRepository::class);
+        $container->bind(AuthorRepository::class, DoctrineAuthorRepository::class);
         $container->bind(AuthenticatedUserRepository::class, DoctrineAuthenticatedUserRepository::class);
         $container->bind(EntityManagerInterface::class, EntityManager::class);
 

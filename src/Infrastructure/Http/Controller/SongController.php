@@ -5,7 +5,7 @@ namespace App\Infrastructure\Http\Controller;
 use App\Application\Music\Exception\EntityNotFoundException;
 use App\Application\Music\Exception\FailedToSaveSongException;
 use App\Application\Music\Exception\ValidationException;
-use App\Application\Music\Service\SongService as AppSongService;
+use App\Application\Music\Service\SongService;
 use App\Infrastructure\Http\Mapper\HttpSongMapper;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
@@ -15,7 +15,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 class SongController
 {
     public function __construct(
-        private readonly AppSongService $songService,
+        private readonly SongService $songService,
         private readonly HttpSongMapper $httpSongMapper
     ) {
     }

@@ -34,6 +34,6 @@ class SongMapper
 
     public function toDomain(DoctrineSong $song): DomainSong
     {
-        return new DomainSong($song->getId(),$song->getTitle(),$song->getReleaseYear(), $song->getAuthor()->getId());
+        return new DomainSong($song->getId(),$song->getTitle(),$song->getReleaseYear(), $song->getAuthor()?->getId());
     }
 }

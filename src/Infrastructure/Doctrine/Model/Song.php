@@ -28,10 +28,6 @@ class Song
     private ?Author $author;
 
 
-    public function __construct()
-    {
-    }
-
     public function getId(): int
     {
         return $this->id;
@@ -47,14 +43,14 @@ class Song
         $this->title = $title;
     }
 
-    public function getReleaseYear(): string
+    public function getReleaseYear(): ?string
     {
         return $this->releaseYear;
     }
 
-    public function setReleaseYear(string $release_year): void
+    public function setReleaseYear(string $releaseYear): void
     {
-        $this->releaseYear = $release_year;
+        $this->releaseYear = $releaseYear;
     }
 
     public function getAuthor(): ?Author

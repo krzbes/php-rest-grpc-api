@@ -3,6 +3,7 @@
 namespace App\Infrastructure\Http\Router;
 
 use App\Infrastructure\DependencyInjection\Container;
+use App\Infrastructure\Http\Controller\AuthorController;
 use App\Infrastructure\Http\Controller\SongController;
 use App\Infrastructure\Http\Handler\ControllerMethodHandler;
 use App\Infrastructure\Http\Handler\LoginHandler;
@@ -38,6 +39,13 @@ class RouterFactory
             new ControllerMethodHandler([$container->get(SongController::class), 'listSongs']),
             [$container->get(AuthMiddleware::class)]
         );
+        $router->addRoute(
+            'GET',
+            '/author',
+            new ControllerMethodHandler([$container->get(AuthorController::class), 'getAuthor']),
+            [$container->get(AuthMiddleware::class)]
+        );
+
         return $router;
     }
 }
