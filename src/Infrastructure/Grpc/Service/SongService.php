@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Infrastructure\Grpc;
+namespace App\Infrastructure\Grpc\Service;
 
 use App\Application\Music\Exception\EntityNotFoundException;
 use App\Application\Music\Exception\FailedToSaveSongException;
 use App\Application\Music\Exception\ValidationException;
 use App\Application\Music\Service\SongService as AppSongService;
 use App\Infrastructure\Grpc\Authentication\JwtAuthenticator;
+use App\Infrastructure\Grpc\Mapper\GrpcSongMapper;
 use Google\Protobuf\Internal\GPBType;
 use Google\Protobuf\Internal\RepeatedField;
 use Schema\CreateSongRequest;

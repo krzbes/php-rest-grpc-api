@@ -8,5 +8,11 @@ grpc:
     - "./schema/song.proto"
     - "./schema/auth.proto"
 
-pool:
-  num_workers: 2
+  pool:
+    num_workers: 2
+    command: "php src/Infrastructure/Grpc/GrpcWorker.php"
+
+http:
+  address: "0.0.0.0:8080"
+  pool:
+    num_workers: 2

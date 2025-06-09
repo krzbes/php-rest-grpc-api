@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Infrastructure\Grpc;
+namespace App\Infrastructure\Grpc\Service;
 
 use App\Application\Security\Service\TokenServiceInterface;
 use App\Application\Security\UseCase\LoginUseCase;
 use App\Domain\Security\Event\LoginFailedException;
-use App\Infrastructure\Grpc\Authentication\JwtAuthenticator;
 use Schema\AuthServiceInterface;
 use Schema\LoginRequest;
 use Schema\LoginResponse;
