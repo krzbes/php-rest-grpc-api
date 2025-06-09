@@ -20,6 +20,24 @@ class RouterFactory
             new ControllerMethodHandler([$container->get(SongController::class), 'getSong']),
             [$container->get(AuthMiddleware::class)]
         );
+        $router->addRoute(
+            'PUT',
+            '/song',
+            new ControllerMethodHandler([$container->get(SongController::class), 'createSong']),
+            [$container->get(AuthMiddleware::class)]
+        );
+        $router->addRoute(
+            'DELETE',
+            '/song',
+            new ControllerMethodHandler([$container->get(SongController::class), 'deleteSong']),
+            [$container->get(AuthMiddleware::class)]
+        );
+        $router->addRoute(
+            'GET',
+            '/songs',
+            new ControllerMethodHandler([$container->get(SongController::class), 'listSongs']),
+            [$container->get(AuthMiddleware::class)]
+        );
         return $router;
     }
 }
