@@ -6,8 +6,8 @@
 namespace Schema;
 
 use Google\Protobuf\Internal\GPBType;
-use Google\Protobuf\Internal\RepeatedField;
 use Google\Protobuf\Internal\GPBUtil;
+use Google\Protobuf\RepeatedField;
 
 /**
  * Generated from protobuf message <code>Schema.ListSongResponse</code>
@@ -25,7 +25,7 @@ class ListSongResponse extends \Google\Protobuf\Internal\Message
      * @param array $data {
      *     Optional. Data for populating the Message object.
      *
-     *     @type array<\Schema\Song>|\Google\Protobuf\Internal\RepeatedField $song
+     *     @type \Schema\Song[] $song
      * }
      */
     public function __construct($data = NULL) {
@@ -35,7 +35,7 @@ class ListSongResponse extends \Google\Protobuf\Internal\Message
 
     /**
      * Generated from protobuf field <code>repeated .Schema.Song song = 1 [json_name = "song"];</code>
-     * @return \Google\Protobuf\Internal\RepeatedField
+     * @return RepeatedField<\Schema\Song>
      */
     public function getSong()
     {
@@ -44,7 +44,7 @@ class ListSongResponse extends \Google\Protobuf\Internal\Message
 
     /**
      * Generated from protobuf field <code>repeated .Schema.Song song = 1 [json_name = "song"];</code>
-     * @param array<\Schema\Song>|\Google\Protobuf\Internal\RepeatedField $var
+     * @param \Schema\Song[] $var
      * @return $this
      */
     public function setSong($var)

@@ -50,9 +50,9 @@ interface AuthorServiceInterface extends GRPC\ServiceInterface
     /**
     * @param GRPC\ContextInterface $ctx
     * @param ListAuthorsRequest $in
-    * @return GetAuthorResponse
+    * @return ListAuthorsResponse
     *
     * @throws GRPC\Exception\InvokeException
     */
-    public function ListAuthors(GRPC\ContextInterface $ctx, ListAuthorsRequest $in): GetAuthorResponse;
+    public function ListAuthors(GRPC\ContextInterface $ctx, ListAuthorsRequest $in): ListAuthorsResponse;
 }

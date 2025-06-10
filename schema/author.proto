@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package  Schema;
+package Schema;
 
 
 import "song.proto";
@@ -14,10 +14,10 @@ message Author {
 
 service AuthorService {
     rpc GetAuthor (GetAuthorRequest) returns (GetAuthorResponse);
-    rpc CreateAuthor(CreateAuthorRequest) returns (DefaultAuthorResponse);
-    rpc DeleteAuthor(DeleteAuthorRequest) returns (DefaultAuthorResponse);
-    rpc UpdateAuthor(UpdateAuthorRequest) returns (DefaultAuthorResponse);
-    rpc ListAuthors (ListAuthorsRequest) returns (stream GetAuthorResponse);
+    rpc CreateAuthor (CreateAuthorRequest) returns (DefaultAuthorResponse);
+    rpc DeleteAuthor (DeleteAuthorRequest) returns (DefaultAuthorResponse);
+    rpc UpdateAuthor (UpdateAuthorRequest) returns (DefaultAuthorResponse);
+    rpc ListAuthors (ListAuthorsRequest) returns (ListAuthorsResponse);
 }
 
 message GetAuthorRequest {
@@ -49,4 +49,8 @@ message UpdateAuthorRequest {
 }
 message ListAuthorsRequest {
 
+}
+
+message ListAuthorsResponse {
+    repeated Author author = 1;
 }
