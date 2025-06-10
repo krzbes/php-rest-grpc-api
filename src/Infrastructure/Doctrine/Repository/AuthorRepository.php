@@ -48,33 +48,32 @@ class AuthorRepository implements AuthorRepositoryInterface
     ';
         $stmt = $conn->executeQuery($sql);
 
-        $currentId    = null;
+        $currentId = null;
         $authorBuffer = null;
 
         while ($row = $stmt->fetchAssociative()) {
-            // przy przejściu do nowego autora – yield poprzedni
             if ($row['author_id'] !== $currentId) {
                 if ($authorBuffer !== null) {
                     yield $this->authorMapper->mapFromArrayToDomain($authorBuffer);
                 }
                 $currentId = $row['author_id'];
                 $authorBuffer = [
-                    'id'      => $row['author_id'],
-                    'name'    => $row['author_name'],
+                    'id' => $row['author_id'],
+                    'name' => $row['author_name'],
                     'surname' => $row['author_surname'],
-                    'songs'   => [],
+                    'songs' => [],
                 ];
             }
-            // dodaj piosenkę, jeśli istnieje
+
             if ($row['song_id'] !== null) {
                 $authorBuffer['songs'][] = [
-                    'id'          => $row['song_id'],
-                    'title'       => $row['song_title'],
+                    'id' => $row['song_id'],
+                    'title' => $row['song_title'],
                     'releaseYear' => $row['song_releaseYear'],
                 ];
             }
         }
-        // yield ostatniego
+
         if ($authorBuffer !== null) {
             yield $this->authorMapper->mapFromArrayToDomain($authorBuffer);
         }
@@ -83,6 +82,28 @@ class AuthorRepository implements AuthorRepositoryInterface
 
     public function save(DomainAuthor $author): void
     {
-        // TODO: Implement save() method.
+        if ($author->getId() !== null) {
+            $existing = $this->em->find(DoctrineAuthor::class, $author->getId());
+            if (!$existing) {
+                throw new \RuntimeException('Author not found for update.');
+            }
+
+            $existing->setName($author->getName());
+            $existing->setSurname($author->getSurname());
+        } else {
+            $new = $this->authorMapper->toEntity($author);
+            $this->em->persist($new);
+        }
+        $this->em->flush();
+    }
+
+    public function deleteById(int $id): void
+    {
+        $this->em->createQuery('DELETE FROM App\Infrastructure\Doctrine\Model\Song s where s.author_id = :id')
+            ->setParameter('id', $id)
+            ->execute();
+        $this->em->createQuery('DELETE FROM App\Infrastructure\Doctrine\Model\Author a WHERE a.id = :id')
+            ->setParameter('id', $id)
+            ->execute();
     }
 }

@@ -55,6 +55,25 @@ class SongController
         return new Response(204, [], null);
     }
 
+    public function updateSong(ServerRequestInterface $request): ResponseInterface
+    {
+        $data = $this->parseBody($request);
+        if (!isset($data['title'], $data['releaseYear'], $data['id'])) {
+            return new  Response(400, [], 'Not enough data');
+        }
+
+        try{
+            $this->songService->updateSong($data['title'], $data['releaseYear'], $data['id']);
+        } catch (EntityNotFoundException $e) {
+            return new  Response(404, [], $e->getMessage());
+        } catch (FailedToSaveSongException $e) {
+            return new  Response(409, [], $e->getMessage());
+        } catch (ValidationException $e) {
+            return new  Response(400, [], $e->getMessage());
+        }
+        return new Response(204, [], null);
+    }
+
     public function deleteSong(ServerRequestInterface $request): ResponseInterface
     {
         $data = $this->parseBody($request);

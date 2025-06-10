@@ -71,4 +71,42 @@ class InputValidator
             throw new ValidationException(implode(', ', $messages));
         }
     }
+
+    public function validateName(string $text): void
+    {
+        $violations = $this->validator->validate($text, [
+            new Assert\NotBlank(),
+            new Assert\Type('string'),
+            new Assert\Length(['min' => 1]),
+        ]);
+
+        if (count($violations) > 0) {
+            $messages = [];
+
+            foreach ($violations as $violation) {
+                $messages[] = 'name : ' . $violation->getMessage();
+            }
+
+            throw new ValidationException(implode(', ', $messages));
+        }
+    }
+
+    public function validateSurname(string $text): void
+    {
+        $violations = $this->validator->validate($text, [
+            new Assert\NotBlank(),
+            new Assert\Type('string'),
+            new Assert\Length(['min' => 1]),
+        ]);
+
+        if (count($violations) > 0) {
+            $messages = [];
+
+            foreach ($violations as $violation) {
+                $messages[] = 'surname : ' . $violation->getMessage();
+            }
+
+            throw new ValidationException(implode(', ', $messages));
+        }
+    }
 }

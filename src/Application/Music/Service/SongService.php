@@ -24,7 +24,7 @@ class SongService
 
     /**
      * @throws \App\Application\Music\Exception\ValidationException
-     * @throws \App\Application\Music\Exception\EntityNotFoundException
+     * @throws EntityNotFoundException
      */
     public function fetchSong(int $id): Song
     {
@@ -47,7 +47,7 @@ class SongService
 
     /**
      * @throws ValidationException
-     * @throws \App\Application\Music\Exception\FailedToSaveSongException
+     * @throws FailedToSaveSongException
      */
     public function createSong(string $title, string $releaseYear, int $authorId): void
     {
@@ -65,8 +65,8 @@ class SongService
 
     /**
      * @throws ValidationException
-     * @throws \App\Application\Music\Exception\EntityNotFoundException
-     * @throws \App\Application\Music\Exception\FailedToSaveSongException
+     * @throws EntityNotFoundException
+     * @throws FailedToSaveSongException
      */
     public function updateSong(int $id, string $title, string $releaseYear ): void
     {
@@ -92,7 +92,7 @@ class SongService
 
     /**
      * @throws ValidationException
-     * @throws \App\Application\Music\Exception\EntityNotFoundException
+     * @throws EntityNotFoundException
      */
     public function deleteSong(int $id): void{
         $this->validator->validateId($id);

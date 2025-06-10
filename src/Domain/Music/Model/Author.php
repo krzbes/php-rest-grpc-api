@@ -3,9 +3,11 @@
 namespace App\Domain\Music\Model;
 
 use App\Domain\Common\DomainEvent;
+use App\Domain\Music\Event\AuthorDeletedEvent;
 use App\Domain\Music\Event\SongAddedToAuthorEvent;
 use App\Domain\Music\Event\SongDeletedEvent;
 use App\Domain\Music\Event\SongDeletedFromAuthorEvent;
+use App\Domain\Music\Exception\AuthorIdAlreadySetException;
 
 class Author
 {
@@ -42,10 +44,20 @@ class Author
     public function setId(int $id): void
     {
         if ($this->id !== null) {
-            throw new SongIdAlreadySetException("Song ID is already set.");
+            throw new AuthorIdAlreadySetException("Author ID is already set.");
         }
 
         $this->id = $id;
+    }
+
+    public function changeName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    public function changeSurname(string $surname): void
+    {
+        $this->surname = $surname;
     }
 
     private function addSong(Song $song): void
@@ -64,7 +76,7 @@ class Author
 
     public function delete(): void
     {
-        $this->addEvent(new SongDeletedEvent($this->id));
+        $this->addEvent(new AuthorDeletedEvent($this->id));
     }
 
     private function addEvent(DomainEvent $event): void

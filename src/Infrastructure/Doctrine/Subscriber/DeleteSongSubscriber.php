@@ -4,7 +4,6 @@ namespace App\Infrastructure\Doctrine\Subscriber;
 
 use App\Domain\Music\Event\SongDeletedEvent;
 use App\Infrastructure\Doctrine\Repository\SongRepository;
-use Doctrine\ORM\EntityManagerInterface;
 
 class DeleteSongSubscriber
 {

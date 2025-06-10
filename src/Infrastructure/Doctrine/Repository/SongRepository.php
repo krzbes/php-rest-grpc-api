@@ -61,7 +61,6 @@ class SongRepository implements SongRepositoryInterface
 
             $existing->setTitle($song->getTitle());
             $existing->setReleaseYear($song->getReleaseYear());
-//            $existing->setAuthor($this->authorMapper->toEntity($song->getAuthor()));
         } else {
             $new = $this->songMapper->toEntity($song);
             $this->em->persist($new);

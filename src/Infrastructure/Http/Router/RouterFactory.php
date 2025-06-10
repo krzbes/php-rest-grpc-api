@@ -33,6 +33,7 @@ class RouterFactory
             new ControllerMethodHandler([$container->get(SongController::class), 'deleteSong']),
             [$container->get(AuthMiddleware::class)]
         );
+
         $router->addRoute(
             'GET',
             '/songs',

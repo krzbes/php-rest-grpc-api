@@ -9,14 +9,14 @@ class AuthorDeletedEvent implements DomainEvent
 
     private \DateTimeImmutable $occurredAt;
 
-    public function __construct(private readonly string $songId)
+    public function __construct(private readonly string $authorId)
     {
         $this->occurredAt = new \DateTimeImmutable();
     }
 
-    public function getSongId(): string
+    public function getAuthorId(): string
     {
-        return $this->songId;
+        return $this->authorId;
     }
 
     public function occurredAt(): \DateTimeImmutable
