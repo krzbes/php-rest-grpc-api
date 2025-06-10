@@ -27,15 +27,22 @@ class AuthorController
         }
 
         try {
-
             $result = $this->authorService->fetchAuthor($data['id']);
-
         } catch (ValidationException $e) {
             return new  Response(400, [], $e->getMessage());
         } catch (EntityNotFoundException $e) {
             return new  Response(404, [], $e->getMessage());
         }
         return new Response(200, [], json_encode($this->authorMapper->toArray($result), JSON_THROW_ON_ERROR));
+    }
+
+
+    public function listAuthors(ServerRequestInterface $request): ResponseInterface
+    {
+        foreach ($this->authorService->fetchAllAuthors() as $author) {
+            $songs[] = $this->authorMapper->toArray($author);
+        }
+        return new Response(200, [], json_encode($songs, JSON_THROW_ON_ERROR));
     }
 
     private function parseBody(ServerRequestInterface $request): array

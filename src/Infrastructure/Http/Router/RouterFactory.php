@@ -45,7 +45,12 @@ class RouterFactory
             new ControllerMethodHandler([$container->get(AuthorController::class), 'getAuthor']),
             [$container->get(AuthMiddleware::class)]
         );
-
+        $router->addRoute(
+            'GET',
+            '/authors',
+            new ControllerMethodHandler([$container->get(AuthorController::class), 'listAuthors']),
+            [$container->get(AuthMiddleware::class)]
+        );
         return $router;
     }
 }

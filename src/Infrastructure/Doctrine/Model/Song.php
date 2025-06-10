@@ -23,7 +23,7 @@ class Song
 
     #[Column(name: 'release_year', type: 'string', length: 4, nullable: true)]
     private ?string $releaseYear = null;
-    #[ManyToOne(targetEntity: Author::class)]
+    #[ManyToOne(targetEntity: Author::class, inversedBy: 'songs')]
     #[JoinColumn(name: 'author_id', referencedColumnName: 'id')]
     private ?Author $author;
 

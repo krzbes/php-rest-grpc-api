@@ -34,4 +34,11 @@ class AuthorService
         }
         return $author;
     }
+
+    public function fetchAllAuthors(): \Generator
+    {
+        foreach ($this->repository->findAll() as $author) {
+            yield $author;
+        }
+    }
 }
